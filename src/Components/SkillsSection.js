@@ -13,9 +13,9 @@ const SkillsSection = ({
       <div id="total">
         Maximum # of Points for Spending: {pointsSpendingMax}
       </div>
-      {SKILL_LIST.map((skill) => {
+      {SKILL_LIST.map((skill, i) => {
         return (
-          <div className="skill">
+          <div key={i} className="skill">
             <div className="skill-name">
               <strong>
                 {skill.name} ({skill.attributeModifier.slice(0, 3)})

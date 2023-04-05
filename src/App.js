@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import { ATTRIBUTE_LIST, CLASS_LIST, SKILL_LIST } from "./consts.js";
 
@@ -18,6 +18,22 @@ function App() {
   const [pointsSpendingMax, setPointsSpendingMax] = useState(10);
   const [skillPoints, setSkillPoints] = useState(createSkillList());
   const [skillTotals, setSkillTotals] = useState(createSkillList());
+
+  // Retrive data from API
+  useEffect(() => {
+    fetch(
+      "https://recruiting.verylongdomaintotestwith.ca/api/nurinfazil/character"
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setAttributeVals(data.body.attributeVals);
+        setAttributeMods(data.body.attributeMods);
+        setClassesAchieved(data.body.classesAchieved);
+        setPointsSpendingMax(data.body.pointsSpendingMax);
+        setSkillPoints(data.body.skillPoints);
+        setSkillTotals(data.body.skillTotals);
+      });
+  }, []);
 
   // Creates an object where key is attribute and value is initialValue
   // {[attribute]: initialValue}
@@ -148,6 +164,27 @@ function App() {
     setSkillTotals(updatedSkillTotals);
   }
 
+  // Executed when save button is pressed
+  function handleSave(e) {
+    e.preventDefault();
+    let data = {
+      classesAchieved,
+      attributeMods,
+      attributeVals,
+      skillPoints,
+      skillTotals,
+      pointsSpendingMax,
+    };
+    fetch(
+      "https://recruiting.verylongdomaintotestwith.ca/api/nurinfazil/character",
+      {
+        method: "post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }
+    );
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -174,6 +211,16 @@ function App() {
           skillTotals={skillTotals}
           handleSkillsCounter={handleSkillsCounter}
         />
+        <div className="save-button-container">
+          <button
+            onClick={(e) => {
+              handleSave(e);
+            }}
+            className="save-button"
+          >
+            Save
+          </button>
+        </div>
       </section>
     </div>
   );

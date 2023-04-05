@@ -103,6 +103,17 @@
   text-align: left;
 }
 
+.save-button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 30px;
+}
+
+.save-button {
+  font-size: 30px;
+  cursor: pointer;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

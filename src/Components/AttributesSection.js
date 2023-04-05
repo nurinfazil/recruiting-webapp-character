@@ -9,9 +9,9 @@ const AttributesSection = ({
     <div>
       <h4 className="section-title">Attributes</h4>
       <div className="attributes-section">
-        {Object.keys(attributeVals).map((attribute) => {
+        {Object.keys(attributeVals).map((attribute, i) => {
           return (
-            <div className="attribute">
+            <div key={i} className="attribute">
               <h5>{attribute}</h5>
               <div className="attribute-modifier">
                 Mod: {attributeMods[attribute]}

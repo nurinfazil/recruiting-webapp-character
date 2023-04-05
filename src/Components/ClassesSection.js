@@ -11,9 +11,9 @@ const ClassesSection = ({
       <h4 className="section-title">Classes</h4>
       <div className="classes-section">
         <div>
-          {Object.keys(CLASS_LIST).map((classType) => {
+          {Object.keys(CLASS_LIST).map((classType, i) => {
             return (
-              <div className="">
+              <div key={i} className="">
                 <h4
                   onClick={() => {
                     setSelectedClass(classType);
