@@ -66,6 +66,17 @@
   padding: 0px 70px;
 }
 
+.classes-section > div > div > h4:hover {
+  cursor: pointer;
+  scale: 1.1;
+}
+
+.class-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

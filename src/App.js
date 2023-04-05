@@ -10,6 +10,7 @@ function App() {
     changeAttributeFromListToObj()
   );
   const [classesAchieved, setClassesAchieved] = useState([]);
+  const [selectedClass, setSelectedClass] = useState("");
 
   function changeAttributeFromListToObj() {
     var initialObj = {};
@@ -74,7 +75,11 @@ function App() {
         />
         <br></br>
         <hr></hr>
-        <ClassesSection classesAchieved={classesAchieved} />
+        <ClassesSection
+          classesAchieved={classesAchieved}
+          selectedClass={selectedClass}
+          setSelectedClass={setSelectedClass}
+        />
       </section>
     </div>
   );
