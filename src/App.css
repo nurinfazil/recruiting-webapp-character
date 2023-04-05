@@ -81,6 +81,28 @@
   font-size: calc(11px + 1vmin);
 }
 
+.skills-section {
+  text-align: left;
+}
+
+#total {
+  text-align: left;
+  margin: 16px 0px;
+  font-weight: bold;
+}
+
+.skill {
+  width: 50vw;
+  margin: 5px 0px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.skill-name {
+  width: 200px;
+  text-align: left;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

@@ -4,6 +4,7 @@ import { ATTRIBUTE_LIST, CLASS_LIST, SKILL_LIST } from "./consts.js";
 
 import AttributesSection from "./Components/AttributesSection";
 import ClassesSection from "./Components/ClassesSection";
+import SkillsSection from "./Components/SkillsSection";
 
 function App() {
   const [attributeVals, setAttributeVals] = useState(
@@ -14,6 +15,9 @@ function App() {
   );
   const [classesAchieved, setClassesAchieved] = useState([]);
   const [selectedClass, setSelectedClass] = useState("");
+  const [pointsSpendingMax, setPointsSpendingMax] = useState(10);
+  const [skillPoints, setSkillPoints] = useState(createSkillList());
+  const [skillTotals, setSkillTotals] = useState(createSkillList());
 
   // Creates an object where key is attribute and value is initialValue
   // {[attribute]: initialValue}
@@ -24,8 +28,16 @@ function App() {
     }, initialObj);
   }
 
+  // Creates an object where key is skill and value is the points (before modifier)
+  function createSkillList() {
+    var initialObj = {};
+    return SKILL_LIST.reduce((obj, curr) => {
+      return Object.assign(obj, { [curr.name]: 0 });
+    }, initialObj);
+  }
+
   // Called when attribute counters are incremented or decremented
-  function handleAttributeCounter(e, attribute, type) {
+  function handleAttributeCounter(attribute, type) {
     // Handle incrementing and decrementing
     if (type == "-") {
       setAttributeVals({
@@ -72,7 +84,68 @@ function App() {
         );
       });
       setAttributeMods(updatedMods);
+
+      // Calculate the pointsSpendingMax
+      // Minimum = 0, Max = inf
+      if (attributeMods["Intelligence"] >= 0) {
+        setPointsSpendingMax(10 + 4 * attributeMods["Intelligence"]);
+      }
     }
+
+    // Update skill totals
+    updateSkillTotals();
+  }
+
+  function handleSkillsCounter(skill, type) {
+    // Calculate current total
+    const used = Object.values(skillPoints).reduce((currTotal, curr) => {
+      return currTotal + curr;
+    }, 0);
+
+    if (type == "-") {
+      // Don't decrement past 0
+      if (skillPoints[skill] <= 0) {
+        return;
+      }
+
+      // Update
+      setSkillPoints({
+        ...skillPoints,
+        [skill]: (skillPoints[skill] -= 1),
+      });
+    } else {
+      // Don't increment past max
+      if (used >= pointsSpendingMax) {
+        return;
+      }
+
+      // Update
+      setSkillPoints({
+        ...skillPoints,
+        [skill]: (skillPoints[skill] += 1),
+      });
+    }
+
+    // Update the skill totals
+    updateSkillTotals();
+  }
+
+  // Used to update the skillTotals
+  function updateSkillTotals() {
+    let updatedSkillTotals = skillTotals;
+
+    SKILL_LIST.forEach((skill) => {
+      // If attribute modifier is greater than 0, then we can account for it.
+      // Otherwise, do not account for it because it is negative
+      if (attributeMods[skill.attributeModifier] >= 0) {
+        updatedSkillTotals[skill.name] =
+          skillPoints[skill.name] + attributeMods[skill.attributeModifier];
+      } else {
+        updatedSkillTotals[skill.name] = skillPoints[skill.name];
+      }
+    });
+
+    setSkillTotals(updatedSkillTotals);
   }
 
   return (
@@ -92,6 +165,14 @@ function App() {
           classesAchieved={classesAchieved}
           selectedClass={selectedClass}
           setSelectedClass={setSelectedClass}
+        />
+        <br></br>
+        <hr></hr>
+        <SkillsSection
+          pointsSpendingMax={pointsSpendingMax}
+          skillPoints={skillPoints}
+          skillTotals={skillTotals}
+          handleSkillsCounter={handleSkillsCounter}
         />
       </section>
     </div>

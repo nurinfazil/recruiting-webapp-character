@@ -18,16 +18,16 @@ const AttributesSection = ({
               </div>
               <div className="attribute-counter">
                 <button
-                  onClick={(e) => {
-                    handleAttributeCounter(e, attribute, "-");
+                  onClick={() => {
+                    handleAttributeCounter(attribute, "-");
                   }}
                 >
                   -
                 </button>
                 <p>{attributeVals[attribute]}</p>
                 <button
-                  onClick={(e) => {
-                    handleAttributeCounter(e, attribute, "+");
+                  onClick={() => {
+                    handleAttributeCounter(attribute, "+");
                   }}
                 >
                   +
