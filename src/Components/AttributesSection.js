@@ -1,6 +1,10 @@
 import React from "react";
 
-const AttributesSection = ({ attributeVals, handleAttributeCounter }) => {
+const AttributesSection = ({
+  attributeVals,
+  handleAttributeCounter,
+  attributeMods,
+}) => {
   return (
     <div>
       <h4 className="section-title">Attributes</h4>
@@ -9,6 +13,9 @@ const AttributesSection = ({ attributeVals, handleAttributeCounter }) => {
           return (
             <div className="attribute">
               <h5>{attribute}</h5>
+              <div className="attribute-modifier">
+                Mod: {attributeMods[attribute]}
+              </div>
               <div className="attribute-counter">
                 <button
                   onClick={(e) => {

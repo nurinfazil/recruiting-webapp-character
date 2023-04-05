@@ -7,15 +7,20 @@ import ClassesSection from "./Components/ClassesSection";
 
 function App() {
   const [attributeVals, setAttributeVals] = useState(
-    changeAttributeFromListToObj()
+    changeAttributeFromListToObj(0)
+  );
+  const [attributeMods, setAttributeMods] = useState(
+    changeAttributeFromListToObj(-5)
   );
   const [classesAchieved, setClassesAchieved] = useState([]);
   const [selectedClass, setSelectedClass] = useState("");
 
-  function changeAttributeFromListToObj() {
+  // Creates an object where key is attribute and value is initialValue
+  // {[attribute]: initialValue}
+  function changeAttributeFromListToObj(initialValue) {
     var initialObj = {};
     return ATTRIBUTE_LIST.reduce((obj, curr) => {
-      return Object.assign(obj, { [curr]: 0 });
+      return Object.assign(obj, { [curr]: initialValue });
     }, initialObj);
   }
 
@@ -45,9 +50,8 @@ function App() {
         }
       }
 
-      let updatedClassesAchieved = classesAchieved;
-
       // Update classesAchieved state with classes that have been achieved
+      let updatedClassesAchieved = classesAchieved;
       if (matchedAttributes == 6 && !classesAchieved.includes(classType)) {
         updatedClassesAchieved.push(classType);
         setClassesAchieved(updatedClassesAchieved);
@@ -59,6 +63,15 @@ function App() {
         updatedClassesAchieved = classesAchieved.filter((c) => c != classType);
         setClassesAchieved(updatedClassesAchieved);
       }
+
+      // Adjust attribute modifier
+      let updatedMods = attributeMods;
+      ATTRIBUTE_LIST.forEach((attribute) => {
+        updatedMods[attribute] = Math.floor(
+          (attributeVals[attribute] - 10) / 2
+        );
+      });
+      setAttributeMods(updatedMods);
     }
   }
 
@@ -70,7 +83,7 @@ function App() {
       <section className="App-section">
         <AttributesSection
           attributeVals={attributeVals}
-          setAttributeVals={setAttributeVals}
+          attributeMods={attributeMods}
           handleAttributeCounter={handleAttributeCounter}
         />
         <br></br>
