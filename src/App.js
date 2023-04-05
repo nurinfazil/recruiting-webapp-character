@@ -21,7 +21,7 @@ function App() {
   const [skillPoints, setSkillPoints] = useState(createSkillList());
   const [skillTotals, setSkillTotals] = useState(createSkillList());
 
-  // Retrive data from API
+  // Retrive data from API on first load
   useEffect(() => {
     fetch(
       "https://recruiting.verylongdomaintotestwith.ca/api/nurinfazil/character"
@@ -37,7 +37,7 @@ function App() {
       });
   }, []);
 
-  // Creates an object where key is attribute and value is initialValue
+  // Returns an object where key is attribute and value is initialValue
   // {[attribute]: initialValue}
   function changeAttributeFromListToObj(initialValue) {
     var initialObj = {};
@@ -46,7 +46,7 @@ function App() {
     }, initialObj);
   }
 
-  // Creates an object where key is skill and value is the points (before modifier)
+  // Returns an object where key is skill and value is the points (before modifier)
   function createSkillList() {
     var initialObj = {};
     return SKILL_LIST.reduce((obj, curr) => {
@@ -61,10 +61,9 @@ function App() {
       return currTotal + curr;
     }, 0);
 
-    console.log(used);
-
     // Handle incrementing and decrementing
     if (type == "-") {
+      // Don't decrement below 0
       if (attributeVals[attribute] <= 0) {
         return;
       }
@@ -73,6 +72,7 @@ function App() {
         [attribute]: (attributeVals[attribute] -= 1),
       });
     } else {
+      // Don't increment above MAX_ATTRIBUTES
       if (used >= MAX_ATTRIBUTES) {
         return;
       }
@@ -98,7 +98,7 @@ function App() {
       if (matchedAttributes == 6 && !classesAchieved.includes(classType)) {
         updatedClassesAchieved.push(classType);
         setClassesAchieved(updatedClassesAchieved);
-        // Remove from classesAchieved if no longer meet min requirements
+        // Remove from classesAchieved if no longer meetS min requirements
       } else if (
         matchedAttributes != 6 &&
         classesAchieved.includes(classType)
@@ -161,7 +161,7 @@ function App() {
     updateSkillTotals();
   }
 
-  // Used to update the skillTotals
+  // Update the skillTotals
   function updateSkillTotals() {
     let updatedSkillTotals = skillTotals;
 

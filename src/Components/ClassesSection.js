@@ -31,9 +31,9 @@ const ClassesSection = ({
           ) : (
             <div>
               <u>{selectedClass}</u>
-              {Object.keys(CLASS_LIST[selectedClass]).map((attribute) => {
+              {Object.keys(CLASS_LIST[selectedClass]).map((attribute, i) => {
                 return (
-                  <div>
+                  <div key={i}>
                     {attribute}: {CLASS_LIST[selectedClass][attribute]}
                   </div>
                 );
