@@ -27,13 +27,37 @@
 }
 
 .App-section {
-  flex: 1 1 0;
-  background-color: hsl(220deg 13% 13%);
-  color: white;
+  padding: 10px 30px;
 }
 
 .App-link {
   color: #61dafb;
+}
+
+.section-title {
+  font-size: calc(10px + 1vmin);
+  text-align: left;
+}
+
+.attributes-section {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.attribute {
+  width: 150px;
+  height: 150px;
+  border: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.attribute-counter {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 @keyframes App-logo-spin {
