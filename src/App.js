@@ -7,6 +7,8 @@ import ClassesSection from "./Components/ClassesSection";
 import SkillsSection from "./Components/SkillsSection";
 
 function App() {
+  const MAX_ATTRIBUTES = 70;
+
   const [attributeVals, setAttributeVals] = useState(
     changeAttributeFromListToObj(0)
   );
@@ -54,13 +56,26 @@ function App() {
 
   // Called when attribute counters are incremented or decremented
   function handleAttributeCounter(attribute, type) {
+    // First calculate how many attributes are used
+    const used = Object.values(attributeVals).reduce((currTotal, curr) => {
+      return currTotal + curr;
+    }, 0);
+
+    console.log(used);
+
     // Handle incrementing and decrementing
     if (type == "-") {
+      if (attributeVals[attribute] <= 0) {
+        return;
+      }
       setAttributeVals({
         ...attributeVals,
         [attribute]: (attributeVals[attribute] -= 1),
       });
     } else {
+      if (used >= MAX_ATTRIBUTES) {
+        return;
+      }
       setAttributeVals({
         ...attributeVals,
         [attribute]: (attributeVals[attribute] += 1),
