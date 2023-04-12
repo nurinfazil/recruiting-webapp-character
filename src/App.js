@@ -23,19 +23,34 @@ function App() {
 
   // Retrive data from API on first load
   useEffect(() => {
-    fetch(
-      "https://recruiting.verylongdomaintotestwith.ca/api/nurinfazil/character"
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setAttributeVals(data.body.attributeVals);
-        setAttributeMods(data.body.attributeMods);
-        setClassesAchieved(data.body.classesAchieved);
-        setPointsSpendingMax(data.body.pointsSpendingMax);
-        setSkillPoints(data.body.skillPoints);
-        setSkillTotals(data.body.skillTotals);
-      });
+    // fetch("https://recruiting.dsdsadasd.ca/api/nurinfazil/character")
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     setAttributeVals(data.body.attributeVals);
+    //     setAttributeMods(data.body.attributeMods);
+    //     setClassesAchieved(data.body.classesAchieved);
+    //     setPointsSpendingMax(data.body.pointsSpendingMax);
+    //     setSkillPoints(data.body.skillPoints);
+    //     setSkillTotals(data.body.skillTotals);
+    //   });
+    getSavedData();
   }, []);
+
+  async function getSavedData() {
+    let response = await fetch(
+      "https://recruiting.verylongdomaintotestwith.ca/api/nurinfazil/character"
+    );
+
+    if (response.status == 200) {
+      let data = await response.json();
+      setAttributeVals(data.body.attributeVals);
+      setAttributeMods(data.body.attributeMods);
+      setClassesAchieved(data.body.classesAchieved);
+      setPointsSpendingMax(data.body.pointsSpendingMax);
+      setSkillPoints(data.body.skillPoints);
+      setSkillTotals(data.body.skillTotals);
+    }
+  }
 
   // Returns an object where key is attribute and value is initialValue
   // {[attribute]: initialValue}
@@ -190,7 +205,12 @@ function App() {
       skillTotals,
       pointsSpendingMax,
     };
-    fetch(
+
+    saveData(data);
+  }
+
+  async function saveData(data) {
+    let res = await fetch(
       "https://recruiting.verylongdomaintotestwith.ca/api/nurinfazil/character",
       {
         method: "post",
