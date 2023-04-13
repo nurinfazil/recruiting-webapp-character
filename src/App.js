@@ -20,19 +20,12 @@ function App() {
   const [pointsSpendingMax, setPointsSpendingMax] = useState(10);
   const [skillPoints, setSkillPoints] = useState(createSkillList());
   const [skillTotals, setSkillTotals] = useState(createSkillList());
+  const [characterData, setCharacterData] = useState({});
+  const [selectedChar, setSelectedChar] = useState("Add New");
+  const [newCharName, setNewCharName] = useState("");
 
   // Retrive data from API on first load
   useEffect(() => {
-    // fetch("https://recruiting.dsdsadasd.ca/api/nurinfazil/character")
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     setAttributeVals(data.body.attributeVals);
-    //     setAttributeMods(data.body.attributeMods);
-    //     setClassesAchieved(data.body.classesAchieved);
-    //     setPointsSpendingMax(data.body.pointsSpendingMax);
-    //     setSkillPoints(data.body.skillPoints);
-    //     setSkillTotals(data.body.skillTotals);
-    //   });
     getSavedData();
   }, []);
 
@@ -43,12 +36,7 @@ function App() {
 
     if (response.status == 200) {
       let data = await response.json();
-      setAttributeVals(data.body.attributeVals);
-      setAttributeMods(data.body.attributeMods);
-      setClassesAchieved(data.body.classesAchieved);
-      setPointsSpendingMax(data.body.pointsSpendingMax);
-      setSkillPoints(data.body.skillPoints);
-      setSkillTotals(data.body.skillTotals);
+      setCharacterData(data.body);
     }
   }
 
@@ -197,15 +185,41 @@ function App() {
   // Executed when save button is pressed
   function handleSave(e) {
     e.preventDefault();
-    let data = {
-      classesAchieved,
-      attributeMods,
-      attributeVals,
-      skillPoints,
-      skillTotals,
-      pointsSpendingMax,
-    };
 
+    if (newCharName.length == 0) {
+      alert("Enter a name");
+      return;
+    }
+
+    let data = {};
+
+    if (selectedChar == "Add New") {
+      data = {
+        ...characterData,
+        [newCharName]: {
+          classesAchieved,
+          attributeMods,
+          attributeVals,
+          skillPoints,
+          skillTotals,
+          pointsSpendingMax,
+        },
+      };
+    } else {
+      data = {
+        ...characterData,
+        [selectedChar]: {
+          classesAchieved,
+          attributeMods,
+          attributeVals,
+          skillPoints,
+          skillTotals,
+          pointsSpendingMax,
+        },
+      };
+    }
+
+    setCharacterData(data);
     saveData(data);
   }
 
@@ -220,12 +234,55 @@ function App() {
     );
   }
 
+  function handleChangeCharacter(e) {
+    setSelectedChar(e.target.value);
+
+    if (e.target.value == "Add New") {
+      setNewCharName("");
+      setAttributeVals(changeAttributeFromListToObj(0));
+      setAttributeMods(changeAttributeFromListToObj(-5));
+      setClassesAchieved([]);
+      setPointsSpendingMax(10);
+      setSkillPoints(createSkillList());
+      setSkillTotals(createSkillList());
+    } else {
+      setAttributeVals(characterData[e.target.value].attributeVals);
+      setAttributeMods(characterData[e.target.value].attributeMods);
+      setClassesAchieved(characterData[e.target.value].classesAchieved);
+      setPointsSpendingMax(characterData[e.target.value].pointsSpendingMax);
+      setSkillPoints(characterData[e.target.value].skillPoints);
+      setSkillTotals(characterData[e.target.value].skillTotals);
+    }
+  }
+
+  function handleNewCharName(e) {
+    setNewCharName(e.target.value);
+  }
+
   return (
     <div className="App">
       <header className="App-header">
         <h3>CHARACTER SHEET</h3>
       </header>
       <section className="App-section">
+        <select onChange={(e) => handleChangeCharacter(e)}>
+          {Object.keys(characterData).map((char, i) => {
+            return (
+              <option key={i} value={char}>
+                {char}
+              </option>
+            );
+          })}
+          <option value="Add New">Add New</option>
+        </select>{" "}
+        {selectedChar == "Add New" ? (
+          <input
+            placeholder="Character Name"
+            onChange={(e) => {
+              handleNewCharName(e);
+            }}
+          ></input>
+        ) : null}
         <AttributesSection
           attributeVals={attributeVals}
           attributeMods={attributeMods}
